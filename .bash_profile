@@ -13,3 +13,5 @@ eval $(thefuck --alias)
 
 #To make pip default to pip3
 alias pip=pip3
+
+alias python=python3
