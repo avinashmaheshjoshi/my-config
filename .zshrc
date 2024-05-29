@@ -8,26 +8,19 @@ fi
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
-export PATH="/usr/local/sbin:$PATH"
-
 # Path to your oh-my-zsh installation.
-export ZSH="/Users/avinashjoshi/.oh-my-zsh"
+export ZSH="$HOME/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-
+#ZSH_THEME="robbyrussell"
 ZSH_THEME="powerlevel10k/powerlevel10k"
 
-#ZSH_THEME="powerlevel9k/powerlevel9k"
-#Powerlevel Theme Customizations
-#POWERLEVEL9K_PROMPT_ON_NEWLINE=true
-#POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
-#POWERLEVEL9K_CONTEXT_TEMPLATE="$"
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in ~/.oh-my-zsh/themes/
+# a theme from this variable instead of looking in $ZSH/themes/
 # If set to an empty array, this variable will have no effect.
 # ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
 
@@ -38,17 +31,16 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Case-sensitive completion must be off. _ and - will be interchangeable.
 # HYPHEN_INSENSITIVE="true"
 
-# Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
-
-# Uncomment the following line to automatically update without prompting.
-# DISABLE_UPDATE_PROMPT="true"
+# Uncomment one of the following lines to change the auto-update behavior
+# zstyle ':omz:update' mode disabled  # disable automatic updates
+# zstyle ':omz:update' mode auto      # update automatically without asking
+# zstyle ':omz:update' mode reminder  # just remind me to update when it's time
 
 # Uncomment the following line to change how often to auto-update (in days).
-# export UPDATE_ZSH_DAYS=13
+# zstyle ':omz:update' frequency 13
 
 # Uncomment the following line if pasting URLs and other text is messed up.
-# DISABLE_MAGIC_FUNCTIONS=true
+# DISABLE_MAGIC_FUNCTIONS="true"
 
 # Uncomment the following line to disable colors in ls.
 # DISABLE_LS_COLORS="true"
@@ -60,6 +52,9 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
+# You can also set it to another string to have that shown instead of the default red dots.
+# e.g. COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
+# Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
 # COMPLETION_WAITING_DOTS="true"
 
 # Uncomment the following line if you want to disable marking untracked files
@@ -79,17 +74,15 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
 # Which plugins would you like to load?
-# Standard plugins can be found in ~/.oh-my-zsh/plugins/*
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
+# Standard plugins can be found in $ZSH/plugins/
+# Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
   git
-  docker
   zsh-autosuggestions
   zsh-syntax-highlighting
-  kubectl
-  minikube
+  z
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -119,7 +112,83 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-source ~/.bash_profile
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/home/avinash/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/home/avinash/anaconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/avinash/anaconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/home/avinash/anaconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+
+###TRUERA LOCAL
+
+export TRUERA_ALLOW_REINIT_DB=1
+export DEV_DEP_INSTALL=1
+export AILENS_HOME=/home/avinash/github/truera/distribution/target/truera-build-dir
+export AILENS_REPO_HOME=~/aiLensExternalData
+export AILENS_DEPENDENCIES_DIR_OVERRIDE=~/aiLensExternalDependencies
+
+export PATH="/usr/local/Cellar:$PATH:"
+export GRPC_PYTHON_BUILD_SYSTEM_OPENSSL=1
+export GRPC_PYTHON_BUILD_SYSTEM_ZLIB=1
+export KONG_PASSWORD=ailens123
+
+export JAVA_HOME=/usr/lib/jvm/zulu11-ca-amd64
+export PATH=$PATH:/usr/lib/jvm/zulu11-ca-amd6/bin
+
+# skip rnn data download
+export I_PROMISE_I_DONT_NEED_RNN_DATA=1
+
+# dynamically choose mvnw or global.
+function mvn() {
+
+    # Stop the search on this folder.
+    # "/" is the highest possible, but you can go for $HOME for example
+    STOP="/"
+
+    # Location of Maven.
+    # $MVN_HOME/bin/mvn is an option...
+    MVN_CMD="$MVN_HOME/bin/mvn"
+
+    # ----------------------------------------------------------------------------
+    # Don't edit below this line
+    #
+    DIR="$( pwd )"
+    FILE="null"
+
+    while [ $DIR != $STOP ]
+    do
+        if [ -e $DIR/mvnw ]
+        then
+            FILE="$DIR/mvnw"
+            break
+        else
+            DIR="$( dirname "$DIR" )"
+        fi
+    done
+
+    if [ $FILE != "null" ]
+        then
+        CMD=$FILE
+        else
+        CMD=$MVN_CMD
+    fi
+
+    # execute maven command with args
+    echo "Calling $CMD $@"
+    $CMD $@
+}
+
+alias subl='"/mnt/c/Program Files/Sublime Text 3/subl.exe"'
